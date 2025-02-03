@@ -18,7 +18,7 @@ dep:
 	echo -e "net.ipv6.conf.all.disable_ipv6 = 1\nnet.ipv6.conf.default.disable_ipv6 = 1" | sudo tee -a /etc/sysctl.conf
 	sudo sysctl -p
 	sudo apt-get update
-	sudo apt-get -y install git screen hostapd autossh bluez bluez-tools bridge-utils policykit-1 genisoimage iodine haveged tcpdump
+	sudo apt -y install git screen hostapd autossh bluez bluez-tools bridge-utils policykit-1-gnome genisoimage iodine haveged tcpdump
 
 	sudo apt-get -y install python3-pip python3-dev
 
@@ -31,8 +31,13 @@ dep:
 # get the correct webapp.js
 	wget -q "https://raw.githubusercontent.com/lgeekjopt/P4wnP1_aloa/master/webapp.js" -O webapp.js
     	
-	sudo apt-get -y install dhcpcd5
-
+	sudo apt -y install dhcpcd5
+	curl -sSL https://ngrok-agent.s3.amazonaws.com/ngrok.asc \
+		| sudo tee /etc/apt/trusted.gpg.d/ngrok.asc >/dev/null \
+		&& echo "deb https://ngrok-agent.s3.amazonaws.com buster main" \
+		| sudo tee /etc/apt/sources.list.d/ngrok.list \
+		&& sudo apt update \
+		&& sudo apt install ngrok
 # 	python dependencies for HIDbackdoor
 	sudo pip install pycrypto # already present on stretch
 #	sudo pip install pydispatcher #already present
@@ -71,6 +76,8 @@ installkali:
 	cp build/P4wnP1_service /usr/local/bin/
 	cp build/P4wnP1_cli /usr/local/bin/
 	cp dist/P4wnP1.service /etc/systemd/system/P4wnP1.service
+	cp ngrok/ngrok.yml /etc/ngrok.yml
+	cp ngrok/ngrok.service /etc/systemd/system/ngrok.service
 # copy over keymaps, scripts and www data
 	mkdir -p /usr/local/P4wnP1
 	cp -R dist/keymaps /usr/local/P4wnP1/
@@ -97,7 +104,7 @@ installkali:
 	systemctl enable haveged
 	systemctl enable avahi-daemon
 	systemctl enable P4wnP1.service
-	
+	systemctl enable ngrok.service
 	echo "You should now restart"
 
 remove:

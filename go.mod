@@ -19,7 +19,7 @@ require (
 	golang.org/x/sys v0.0.0-20181107165924-66b7b1311ac8
 	google.golang.org/grpc v1.16.0
 	gopkg.in/sourcemap.v1 v1.0.5 // indirect
-	periph.io/x/periph v3.3.0+incompatible
+	periph.io/x/conn/v3/diver/driverreg v3.7.1
 )
 
 go 1.13
